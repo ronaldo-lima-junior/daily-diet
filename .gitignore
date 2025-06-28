@@ -1,0 +1,43 @@
+# Node modules
+node_modules/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build outputs
+dist/
+build/
+out/
+
+# Test Coverage
+coverage/
+
+# IDEs (se for o caso)
+.vscode/
+.idea/
+
+# Arquivos gerados pelo pnpm
+.pnp/
+.pnp.js
+
+# Arquivos temporários do OS
+.DS_Store
+Thumbs.db
+
+# Arquivos do Prettier
+.prettierignore
+
+# Dependências do TypeScript (opcional, se usado no monorepo)
+*.tsbuildinfo
+
+# Cache do ESLint (opcional)
+.eslintcache
+
+.env
+.env.test
+*.db
+**/tmp
