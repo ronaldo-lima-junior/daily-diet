@@ -20,7 +20,6 @@ export async function mealsRoutes(app: FastifyInstance) {
         request.body,
       )
 
-      console.log(request.user)
       await knex('meals').insert({
         id: randomUUID(),
         name,
