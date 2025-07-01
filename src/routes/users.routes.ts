@@ -4,11 +4,29 @@ import { z } from 'zod'
 import { knex } from '../infra/database'
 
 export async function usersRoutes(app: FastifyInstance) {
+  app.get('/', async () => {
+    const users = knex('users').select()
+
+    return users
+  })
+
   app.post('/', async (request, response) => {
     const createUserBodySchema = z.object({
       name: z.string().min(1),
       email: z.string().email(),
     })
+
+    const { name, email } = createUserBodySchema.parse(request.body)
+
+    const count = await knex('users')
+      .select()
+      .count('id', { as: 'count' })
+      .where('email', email)
+      .first()
+
+    if (Number(count?.count) > 0) {
+      throw new Error('E-mail já cadastrado')
+    }
 
     let sessionId = request.cookies.sessionId
     if (!sessionId) {
@@ -20,7 +38,6 @@ export async function usersRoutes(app: FastifyInstance) {
       })
     }
 
-    const { name, email } = createUserBodySchema.parse(request.body)
     await knex('users').insert({
       id: randomUUID(),
       name,
