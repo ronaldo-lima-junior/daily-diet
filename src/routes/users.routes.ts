@@ -18,14 +18,10 @@ export async function usersRoutes(app: FastifyInstance) {
 
     const { name, email } = createUserBodySchema.parse(request.body)
 
-    const count = await knex('users')
-      .select()
-      .count('id', { as: 'count' })
-      .where('email', email)
-      .first()
+    const userEmail = await knex('users').where({ email }).first()
 
-    if (Number(count?.count) > 0) {
-      throw new Error('E-mail já cadastrado')
+    if (userEmail) {
+      return response.status(400).send({ message: 'User already exists' })
     }
 
     let sessionId = request.cookies.sessionId
