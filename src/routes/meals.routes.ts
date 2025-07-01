@@ -3,8 +3,6 @@ import { string, z } from 'zod'
 import { knex } from '../infra/database'
 import { randomUUID } from 'node:crypto'
 import { checkSessionIdExists } from '../middleware/check-session-id-exists'
-import { error } from 'node:console'
-
 export async function mealsRoutes(app: FastifyInstance) {
   app.post(
     '/',
