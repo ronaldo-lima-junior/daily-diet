@@ -91,4 +91,56 @@ export async function mealsRoutes(app: FastifyInstance) {
       return response.status(204).send()
     },
   )
+
+  app.get(
+    '/metrics',
+    { preHandler: [checkSessionIdExists] },
+    async (request) => {
+      const userId = request.user?.id
+
+      const meals = await knex('meals')
+        .where({ user_id: userId })
+        .orderBy('date', 'desc')
+
+      const mealsOnDiet = await knex('meals')
+        .where({
+          user_id: userId,
+          is_on_diet: true,
+        })
+        .count('id', { as: 'total' })
+        .first()
+
+      const mealsOffDiet = await knex('meals')
+        .where({
+          user_id: userId,
+          is_on_diet: false,
+        })
+        .count('id', { as: 'total' })
+        .first()
+
+      const { bestOnDietSequence } = meals.reduce(
+        (acc, meal) => {
+          if (meal.is_on_diet) {
+            acc.currentSequence += 1
+          } else {
+            acc.currentSequence = 0
+          }
+
+          if (acc.currentSequence > acc.bestOnDietSequence) {
+            acc.bestOnDietSequence = acc.currentSequence
+          }
+
+          return acc
+        },
+        { bestOnDietSequence: 0, currentSequence: 0 },
+      )
+
+      return {
+        meals: meals.length,
+        mealsOnDiet: mealsOnDiet?.total,
+        mealsOffDiet: mealsOffDiet?.total,
+        bestOnDietSequence,
+      }
+    },
+  )
 }
