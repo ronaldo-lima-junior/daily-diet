@@ -99,17 +99,6 @@ O foco está em aplicar boas práticas de arquitetura, organização de código 
 | GET    | `/metrics`            | Retorna estatísticas gerais do usuário          |  
 | GET    | `/metrics/summary`    | Exibe resumo da dieta (refeições dentro/fora)   |  
 
----
-
-## 🧪 Testes  
-
-Caso os testes estejam implementados:  
-
-1. Configure o `.env.test`.  
-2. Execute:  
-   ```bash
-   npm test
-   ```
 
 ---
 
